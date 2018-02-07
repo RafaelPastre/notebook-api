@@ -5,20 +5,20 @@ class ContactsController < ApplicationController
   def index
     @contacts = Contact.all
 
-    render json: @contacts# , methods: :Birthdate_br # [:hello, :i18n ]
+    render json: @contacts# , methods: :birthdate_br # [:hello, :i18n ]
   end
 
   # GET /contacts/1
   def show
-    render json: @contact.to_br
+    render json: @contact, include: [:kind, :address, :phones]#, meta: { author: "Pastre"} #, include: [:kind, :phones, :address]
   end
 
-  # POST /contacts
+  # POST /contacts 
   def create
     @contact = Contact.new(contact_params)
 
     if @contact.save
-      render json: @contact, status: :created, location: @contact
+      render json: @contact, include: [:kind, :phones, :address], status: :created, location: @contact
     else
       render json: @contact.errors, status: :unprocessable_entity
     end
@@ -46,6 +46,11 @@ class ContactsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def contact_params
-      params.require(:contact).permit(:name, :email, :Birthdate, :kind_id)
+      # params.require(:contact).permit(:name, :email, :Birthdate, :kind_id,
+      # phones_attributes: [:id,:number, :_destroy],
+      # address_attributes: [:id, :street, :city]
+      # )
+
+      ActiveModelSerializers::Deserialization.jsonapi_parse(params)
     end
 end

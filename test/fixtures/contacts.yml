@@ -3,9 +3,9 @@
 one:
   name: MyString
   email: MyString
-  Birthdate: 2018-01-23
+  birthdate: 2018-01-23
 
 two:
   name: MyString
   email: MyString
-  Birthdate: 2018-01-23
+  birthdate: 2018-01-23
